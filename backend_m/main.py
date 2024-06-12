@@ -19,7 +19,10 @@ while 1:
         if len(y.split()) != 2:
             print("Invalid Input")
         else:
-            service.input_1(session, int(y.split()[0]), y.split()[1])
+            if not (y.split()[0]).isdigit():
+                print("Number of a train must be an intiger")
+            else:
+                service.input_1(session, int(y.split()[0]), y.split()[1])
     elif x == '2':
         print("Provide an old name, and a new name to update")
         y = input()
@@ -40,6 +43,11 @@ while 1:
         if len(y.split()) != 2:
             print("Invalid Input")
         else:
-            service.input_4(session, int(y.split()[0]), int(y.split()[1]))
+            if not (y.split()[0]).isdigit():
+                print("Number of a train must be an intiger")
+            elif not (y.split()[1]).isdigit():
+                print("Number of a seat must be an intiger")
+            else:
+                service.input_4(session, int(y.split()[0]), int(y.split()[1]))
     else:
         print("Invalid Input")
