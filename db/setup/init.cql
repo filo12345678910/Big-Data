@@ -8,12 +8,13 @@ CREATE KEYSPACE IF NOT EXISTS train WITH replication = {
 USE train;
 
 CREATE TABLE IF NOT EXISTS trains (
-    id UUID PRIMARY KEY,
+    id INT PRIMARY KEY,
     capacity INT
 );
 
 CREATE TABLE IF NOT EXISTS trainss (
-    seat_id UUID PRIMARY KEY,
+    seat_id INT,
     train_id INT,
-    name TEXT
+    name TEXT,
+    PRIMARY KEY (seat_id, train_id)
 );

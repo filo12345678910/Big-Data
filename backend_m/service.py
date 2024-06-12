@@ -1,5 +1,5 @@
-from connection import session
 import uuid
+import random
 
 def insert_data_trains(session, a, b):
     session.execute("""
@@ -21,12 +21,15 @@ def query_data(session, table):
 def clear_table(session, table_name):
     session.execute(f"TRUNCATE {table_name}")
 
-clear_table(session, 'trains')
-clear_table(session, 'trainss')
+def start(session):
+    clear_table(session, 'trains')
+    clear_table(session, 'trainss')
 
-insert_data_trains(session, uuid.uuid4(), 43)
-insert_data_trainss(session, uuid.uuid4(), 1, 'sda')
+    for i in range(10):
+        capacity = random.randint(20, 40)
+        insert_data_trains(session, i, capacity)
+        for j in range(capacity):
+            insert_data_trainss(session, j, i, 'none')
 
-clear_table(session, 'trains')
-clear_table(session, 'trainss')
-
+    query_data(session, 'trains')
+    query_data(session, 'trainss')
