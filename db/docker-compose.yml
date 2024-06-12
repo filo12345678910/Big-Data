@@ -15,23 +15,23 @@ services:
       cassandra-net:
         ipv4_address: 192.168.16.2
 
-  # cassandra-node1:
-  #   image: cassandra:latest
-  #   container_name: cassandra-node1
-  #   ports:
-  #     - "9043:9042"
-  #   environment:
-  #     - CASSANDRA_CLUSTER_NAME=bigd-cluster
-  #     - CASSANDRA_DC=dc1
-  #     - CASSANDRA_RACK=rack1
-  #     - CASSANDRA_SEEDS=cassandra-master
-  #   depends_on:
-  #     - cassandra-master
-  #   volumes:
-  #     - ./cassandra-node1:/var/lib/cassandra
-  #   networks:
-  #     cassandra-net:
-  #       ipv4_address: 192.168.16.3
+  cassandra-node1:
+    image: cassandra:latest
+    container_name: cassandra-node1
+    ports:
+      - "9043:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=bigd-cluster
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra-master
+    depends_on:
+      - cassandra-master
+    volumes:
+      - ./cassandra-node1:/var/lib/cassandra
+    networks:
+      cassandra-net:
+        ipv4_address: 192.168.16.3
 
   cqlsh-setup:
     image: nuvo/docker-cqlsh
@@ -42,7 +42,7 @@ services:
       - CQLVERSION=3.4.6
     depends_on:
       - cassandra-master
-      #      - cassandra-node1
+      - cassandra-node1
     volumes:
       - ./setup:/scripts
     entrypoint: [bash, /scripts/setup.sh]
