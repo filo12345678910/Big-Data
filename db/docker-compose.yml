@@ -1,0 +1,59 @@
+services:
+  cassandra-master:
+    image: cassandra:latest
+    container_name: cassandra-master
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=bigd-cluster
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra-master
+    volumes:
+      - ./cassandra-master:/var/lib/cassandra
+    networks:
+      cassandra-net:
+        ipv4_address: 192.168.16.2
+
+  # cassandra-node1:
+  #   image: cassandra:latest
+  #   container_name: cassandra-node1
+  #   ports:
+  #     - "9043:9042"
+  #   environment:
+  #     - CASSANDRA_CLUSTER_NAME=bigd-cluster
+  #     - CASSANDRA_DC=dc1
+  #     - CASSANDRA_RACK=rack1
+  #     - CASSANDRA_SEEDS=cassandra-master
+  #   depends_on:
+  #     - cassandra-master
+  #   volumes:
+  #     - ./cassandra-node1:/var/lib/cassandra
+  #   networks:
+  #     cassandra-net:
+  #       ipv4_address: 192.168.16.3
+
+  cqlsh-setup:
+    image: nuvo/docker-cqlsh
+    container_name: cqlsh-setup
+    environment:
+      - CQLSH_HOST=192.168.16.2
+      - CQLSH_PORT=9042
+      - CQLVERSION=3.4.6
+    depends_on:
+      - cassandra-master
+      #      - cassandra-node1
+    volumes:
+      - ./setup:/scripts
+    entrypoint: [bash, /scripts/setup.sh]
+    networks:
+      cassandra-net:
+        ipv4_address: 192.168.16.4
+
+networks:
+  cassandra-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/20
+          gateway: 192.168.16.1

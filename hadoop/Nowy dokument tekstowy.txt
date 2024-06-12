@@ -1,1 +1,0 @@
-docker exec -it hadoop-namenode-1 /bin/bash
