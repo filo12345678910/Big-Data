@@ -67,3 +67,17 @@ def input_3(session, name):
     seat_id, train_id = row.seat_id, row.train_id
     print(f"The reservation on the name: {name}, has train number: {train_id} and seat number: {seat_id}")
     return 1
+
+def input_4(session, train_id, seat_id):
+    result = session.execute("""SELECT * FROM trainss 
+    WHERE seat_id = %s AND train_id = %s ALLOW FILTERING""", (seat_id, train_id))
+    if not result.one():
+        print("There is no seat with these numbers")
+        return 0
+    row = result.one()
+    name = row.name
+    if name == 'none':
+        print("This seat is not reserved")
+        return 0
+    print(f"The reservation on the name: {name}, has train number: {train_id} and seat number: {seat_id}")
+    return 1
