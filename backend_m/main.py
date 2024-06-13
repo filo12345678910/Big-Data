@@ -1,6 +1,9 @@
 from connection import session
 import service
+import stress_test
+
 service.start(session)
+
 while 1:
     print("""
 0 - show entire database
@@ -8,6 +11,9 @@ while 1:
 2 - update a reservation
 3 - see reservation by name
 4 - see reservation by seat and train id
+5 - stress test 1 (same request)
+6 - stress test 2 (2 clients random requests)
+7 - stress test 3 (2 clients take all)
           """)
     x = input()
     if x == '0':
@@ -49,5 +55,12 @@ while 1:
                 print("Number of a seat must be an intiger")
             else:
                 service.input_4(session, int(y.split()[0]), int(y.split()[1]))
+    elif x == '5':
+        stress_test.stress_test_1(session)
+    elif x == '6':
+        stress_test.stress_test_2(session)
+    elif x == '7':
+        stress_test.stress_test_3(session)
+
     else:
         print("Invalid Input")
