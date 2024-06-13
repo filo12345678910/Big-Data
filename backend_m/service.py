@@ -33,7 +33,6 @@ def start(session):
             insert_data_trainss(session, j, i, 'none')
 
 def input_1(session, train_id, name):
-    # Fetch the train details
     result = session.execute("SELECT * FROM trains WHERE id = %s", (train_id,))
     train = result.one()
     if not train:
@@ -43,7 +42,6 @@ def input_1(session, train_id, name):
         print("There are no more seats left on this train")
         return 0
     
-    # Update the capacity conditionally
     capacity_update = session.execute("""
         UPDATE trains SET capacity = %s 
         WHERE id = %s IF capacity = %s
@@ -53,14 +51,12 @@ def input_1(session, train_id, name):
         print("Failed to decrement capacity, possibly due to race condition")
         return 0
 
-    # Fetch an available seat
     result_2 = session.execute("SELECT * FROM trainss WHERE train_id = %s AND name = 'none' ALLOW FILTERING", (train_id,))
     available_seat = result_2.one()
     if not available_seat:
         print("No available seats found")
         return 0
     
-    # Reserve the seat
     seat_update = session.execute("""
         UPDATE trainss SET name = %s 
         WHERE seat_id = %s AND train_id = %s IF name = 'none'
@@ -70,7 +66,6 @@ def input_1(session, train_id, name):
         print(f'You have successfully reserved seat number: {available_seat.seat_id}')
         return 1
     else:
-        # Rollback the capacity update in case of failure
         session.execute("UPDATE trains SET capacity = %s WHERE id = %s", (train.capacity, train_id))
         print("Failed to reserve the seat, rolled back capacity change")
         return 0
