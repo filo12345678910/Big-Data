@@ -1,6 +1,15 @@
 # Big Data Project
 
-Project made for Big Data courde. It utilizes cassandra and docker.
+A project developed as part of the Big Data course, focused on working with large-scale data storage using Apache Cassandra.
+
+The project uses Docker to configure and run the database environment and Python for backend implementation.
+
+## Technologies
+
+- Python
+- Apache Cassandra
+- Docker
+- Docker Compose
 
 ## How to use:
 
